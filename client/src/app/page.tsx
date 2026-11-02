@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
+import { loadHome } from "@/api/server/home";
 import { AdSlot, LeaderboardAd } from "@/components/ads/AdSlot";
+import { HomeDataProvider } from "@/components/providers/HomeDataProvider";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { SECTION_IDS } from "@/config/navigation";
@@ -24,37 +26,39 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Home page layout. Every content section lives in `src/features/<section>`
- * and loads its own data in the browser through its hook
- * (→ /api/sections/<section>). Ads and SEO data stay server-rendered and are
- * passed into the sections as props.
+ * Home page layout. All section data is loaded once on the server and handed
+ * to the hooks as their first value, so the HTML already contains every
+ * section; in the browser the sections keep refreshing from /api/home.
+ * Each section's UI lives in `src/features/<section>`. Ads stay server-rendered.
  */
 export default async function HomePage() {
-  const home = await getHomePage();
+  const [data, home] = await Promise.all([loadHome(), getHomePage()]);
 
   return (
-    <Container id={SECTION_IDS.top} className="scroll-mt-40">
-      <LeaderboardAd slot="topLeaderboard" />
-      <Ticker />
-      <LiveSection />
+    <HomeDataProvider data={data}>
+      <Container id={SECTION_IDS.top} className="scroll-mt-40">
+        <LeaderboardAd slot="topLeaderboard" />
+        <Ticker />
+        <LiveSection />
 
-      <div className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <FeaturedVideoSection />
-        <aside>
-          <TrendingSection />
-          <AdSlot slot="heroRectangle" className="mt-5" />
-        </aside>
-      </div>
+        <div className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <FeaturedVideoSection />
+          <aside>
+            <TrendingSection />
+            <AdSlot slot="heroRectangle" className="mt-5" />
+          </aside>
+        </div>
 
-      <LatestVideosSection inFeedAd={<AdSlot slot="videoInFeed" />} />
-      <LeaderboardAd slot="midLeaderboard" className="mt-8" />
-      <FacebookReelsSection />
-      <LeaderboardAd slot="reelsLeaderboard" className="mt-8" />
-      <FacebookPageSection ad={<AdSlot slot="facebookHalfPage" />} />
-      <InstagramSection ad={<AdSlot slot="instagramRectangle" className="m-0" />} />
-      <TipSection />
+        <LatestVideosSection inFeedAd={<AdSlot slot="videoInFeed" />} />
+        <LeaderboardAd slot="midLeaderboard" className="mt-8" />
+        <FacebookReelsSection />
+        <LeaderboardAd slot="reelsLeaderboard" className="mt-8" />
+        <FacebookPageSection ad={<AdSlot slot="facebookHalfPage" />} />
+        <InstagramSection ad={<AdSlot slot="instagramRectangle" className="m-0" />} />
+        <TipSection />
 
-      <JsonLd data={home.seo?.structuredData} />
-    </Container>
+        <JsonLd data={home.seo?.structuredData} />
+      </Container>
+    </HomeDataProvider>
   );
 }

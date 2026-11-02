@@ -8,15 +8,14 @@ import {
   facebookVideoPluginUrl,
 } from "@/lib/utils/social-embeds";
 import { extractYouTubeId } from "@/lib/utils/youtube";
-
-import { useLiveStream } from "./useLiveStream";
+import { useSection } from "@/hooks/useSection";
 
 /**
  * Red "LIVE" block above the hero. Shown only while an editor has
  * Strapi → Live Stream → "isLive" switched on.
  */
 export function LiveSection() {
-  const { data: live } = useLiveStream();
+  const live = useSection("live");
   if (!live?.isLive || !live.url) return null;
 
   const youtubeId = live.platform === "youtube" ? extractYouTubeId(live.url) : null;
