@@ -1,13 +1,15 @@
+"use client";
+
 import { ButtonGroup } from "@/components/ui/Button";
 import { SECTION_IDS } from "@/config/navigation";
-import type { CtaCard } from "@/types/cms";
 
-interface TipSectionProps {
-  card: CtaCard;
-}
+import { useTip } from "./useTip";
 
 /** Yellow call-to-action asking readers to send consumer complaints (Strapi → Home Page → tipBlock). */
-export function TipSection({ card }: TipSectionProps) {
+export function TipSection() {
+  const { data: card } = useTip();
+  if (!card) return null;
+
   return (
     <section
       id={SECTION_IDS.tip}

@@ -1,3 +1,5 @@
+"use client";
+
 import { YouTubeEmbed } from "@/components/video/YouTubeEmbed";
 import { SECTION_IDS } from "@/config/navigation";
 import {
@@ -6,15 +8,16 @@ import {
   facebookVideoPluginUrl,
 } from "@/lib/utils/social-embeds";
 import { extractYouTubeId } from "@/lib/utils/youtube";
-import { getLiveStream } from "@/services/settings.service";
+
+import { useLiveStream } from "./useLiveStream";
 
 /**
  * Red "LIVE" block above the hero. Shown only while an editor has
  * Strapi → Live Stream → "isLive" switched on.
  */
-export async function LiveSection() {
-  const live = await getLiveStream();
-  if (!live.isLive || !live.url) return null;
+export function LiveSection() {
+  const { data: live } = useLiveStream();
+  if (!live?.isLive || !live.url) return null;
 
   const youtubeId = live.platform === "youtube" ? extractYouTubeId(live.url) : null;
   const title = live.title || "Multiply News live";

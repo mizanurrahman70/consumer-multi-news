@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
-import { LeaderboardAd } from "@/components/ads/AdSlot";
-import { FacebookSection } from "@/components/home/FacebookSection";
-import { HeroSection } from "@/components/home/HeroSection";
-import { InstagramSection } from "@/components/home/InstagramSection";
-import { LatestVideosSection, LatestVideosSkeleton } from "@/components/home/LatestVideosSection";
-import { LiveSection } from "@/components/home/LiveSection";
-import { ReelsSection, ReelsSkeleton } from "@/components/home/ReelsSection";
-import { Ticker, TickerSkeleton } from "@/components/home/Ticker";
-import { TipSection } from "@/components/home/TipSection";
+import { AdSlot, LeaderboardAd } from "@/components/ads/AdSlot";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { SECTION_IDS } from "@/config/navigation";
+import { FacebookPageSection } from "@/features/facebook-page";
+import { FacebookReelsSection } from "@/features/facebook-reels";
+import { FeaturedVideoSection } from "@/features/featured-video";
+import { InstagramSection } from "@/features/instagram";
+import { LatestVideosSection } from "@/features/latest-videos";
+import { LiveSection } from "@/features/live";
+import { Ticker } from "@/features/ticker";
+import { TipSection } from "@/features/tip";
+import { TrendingSection } from "@/features/trending-videos";
 import { toMetadata } from "@/lib/seo/metadata";
 import { getHomePage } from "@/services/home.service";
 import { getSiteSettings } from "@/services/settings.service";
@@ -24,51 +24,35 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Home page. Texts, hero and trending come from Strapi's "Home Page"; each
- * list (ticker, videos, reels, Instagram) streams behind its own <Suspense>,
- * so one slow request never blocks the rest.
+ * Home page layout. Every content section lives in `src/features/<section>`
+ * and loads its own data in the browser through its hook
+ * (→ /api/sections/<section>). Ads and SEO data stay server-rendered and are
+ * passed into the sections as props.
  */
 export default async function HomePage() {
-  const [home, settings] = await Promise.all([getHomePage(), getSiteSettings()]);
+  const home = await getHomePage();
 
   return (
     <Container id={SECTION_IDS.top} className="scroll-mt-40">
       <LeaderboardAd slot="topLeaderboard" />
+      <Ticker />
+      <LiveSection />
 
-      <Suspense fallback={<TickerSkeleton />}>
-        <Ticker />
-      </Suspense>
+      <div className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <FeaturedVideoSection />
+        <aside>
+          <TrendingSection />
+          <AdSlot slot="heroRectangle" className="mt-5" />
+        </aside>
+      </div>
 
-      <Suspense fallback={null}>
-        <LiveSection />
-      </Suspense>
-
-      <HeroSection featured={home.featured} trendingTitle={home.trendingTitle} trending={home.trending} />
-
-      <Suspense fallback={<LatestVideosSkeleton heading={home.latestSection} />}>
-        <LatestVideosSection heading={home.latestSection} limit={home.latestLimit} />
-      </Suspense>
-
+      <LatestVideosSection inFeedAd={<AdSlot slot="videoInFeed" />} />
       <LeaderboardAd slot="midLeaderboard" className="mt-8" />
-
-      <Suspense fallback={<ReelsSkeleton heading={home.reelsSection} />}>
-        <ReelsSection heading={home.reelsSection} />
-      </Suspense>
-
+      <FacebookReelsSection />
       <LeaderboardAd slot="reelsLeaderboard" className="mt-8" />
-
-      <FacebookSection
-        heading={home.facebookSection}
-        card={home.facebookBlock}
-        pageUrl={settings.social.facebook}
-        siteName={settings.name}
-      />
-
-      <Suspense fallback={null}>
-        <InstagramSection heading={home.instagramSection} card={home.instagramBlock} />
-      </Suspense>
-
-      <TipSection card={home.tipBlock} />
+      <FacebookPageSection ad={<AdSlot slot="facebookHalfPage" />} />
+      <InstagramSection ad={<AdSlot slot="instagramRectangle" className="m-0" />} />
+      <TipSection />
 
       <JsonLd data={home.seo?.structuredData} />
     </Container>

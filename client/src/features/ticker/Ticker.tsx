@@ -1,9 +1,12 @@
-import { TickerVideoButton } from "@/components/home/TickerVideoButton";
+"use client";
+
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { cn } from "@/lib/utils/cn";
 import { isExternalUrl } from "@/lib/utils/links";
-import { getTickerItems } from "@/services/video.service";
 import type { TickerItem } from "@/types/content";
+
+import { TickerVideoButton } from "./TickerVideoButton";
+import { useTicker } from "./useTicker";
 
 const tickerClass = "mt-4 flex overflow-hidden border border-line";
 const labelClass =
@@ -21,10 +24,22 @@ function TickerHeadline({ item }: { item: TickerItem }) {
   );
 }
 
+function TickerSkeleton() {
+  return (
+    <div className={tickerClass} aria-hidden="true">
+      <b className={labelClass}>BREAKING</b>
+      <div className="flex flex-1 items-center px-3.5">
+        <span className="text-body-sm text-muted">Loading latest headlines…</span>
+      </div>
+    </div>
+  );
+}
+
 /** Scrolling "BREAKING" headline strip. Pauses on hover; static for reduced motion. */
-export async function Ticker() {
-  const items = await getTickerItems();
-  if (items.length === 0) return null;
+export function Ticker() {
+  const { data: items, isLoading } = useTicker();
+  if (isLoading) return <TickerSkeleton />;
+  if (!items || items.length === 0) return null;
 
   return (
     <div className={cn("group", tickerClass)} aria-label="Latest headlines">
@@ -35,17 +50,6 @@ export async function Ticker() {
             <TickerHeadline key={item.id} item={item} />
           ))}
         </div>
-      </div>
-    </div>
-  );
-}
-
-export function TickerSkeleton() {
-  return (
-    <div className={tickerClass} aria-hidden="true">
-      <b className={labelClass}>BREAKING</b>
-      <div className="flex flex-1 items-center px-3.5">
-        <span className="text-body-sm text-muted">Loading latest headlines…</span>
       </div>
     </div>
   );

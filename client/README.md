@@ -26,9 +26,25 @@ content from `src/data/fallback/`, so it never shows a blank page.
 ```
 Strapi entry saved ──► Strapi webhook ──► POST /api/revalidate ──► cache tag expired
                                                                        │
-browser ◄── page ◄── component ◄── service ("use cache" + tag) ◄── lib/strapi (client + mapper)
+Home-page section (browser)                         server
+features/<name>/Section.tsx ── use<Name>() hook ──► GET /api/sections/<name> ──► features/<name>/server.ts
+        (SWR: loading / error / data)   api.ts                                    └► service ("use cache" + tag)
+                                                                                     └► lib/strapi (client + mapper)
 ```
 
+- **Features** (`src/features/<section>/`): every home-page section has its own folder:
+
+  | File | Role |
+  |---|---|
+  | `api.ts` | Endpoint URL, data type, browser `fetchX()` |
+  | `useX.ts` | SWR hook returning `{ data, error, isLoading }` |
+  | `XSection.tsx` | `"use client"` UI with its own loading skeleton |
+  | `server.ts` | Server loader for `/api/sections/<name>` (server-only) |
+  | `index.ts` | Public exports (component, hook, type) |
+
+  Register a new section's loader in `src/features/section-loaders.ts`. Ads and SEO stay
+  server-rendered and are passed into sections as props (`inFeedAd`, `ad`).
+- Header, footer, metadata and CMS pages (`/[slug]`) are still rendered on the server.
 - **Services** (`src/services/`) are the only place components get data. Each is cached with
   `"use cache"`, `cacheLife` and a tag from `src/lib/cache-tags.ts`.
 - **Mappers** (`src/lib/strapi/mappers/`) convert Strapi responses into the site's own types
@@ -52,11 +68,14 @@ browser ◄── page ◄── component ◄── service ("use cache" + tag)
 
 ```
 src/
-  app/                 layout, home, [slug] pages, sitemap, robots, error/404, /api/revalidate
+  app/                 layout, home, [slug] pages, sitemap, robots, error/404,
+                       /api/revalidate, /api/sections/[section]
+  features/            one folder per home-page section: ticker, live, featured-video,
+                       trending-videos, latest-videos, facebook-reels, facebook-page,
+                       instagram, tip (api.ts, hook, component, server.ts, index.ts)
   components/
-    ui/                primitives: Button(Group), Container, SectionHeader, CmsImage, icons…
+    ui/                primitives: Button(Group), Container, SectionHeader, CmsImage, CtaCardContent, icons…
     layout/            TopBar, Header, MobileNav, Footer, FooterBanner, Logo
-    home/              one component per home-page section
     video/             VideoCard, YouTubeEmbed, site-wide VideoPlayerProvider/modal
     ads/               AdSlot (CMS-controlled), AnchorAd
     cms/ seo/          RichText (Strapi Blocks), JsonLd
