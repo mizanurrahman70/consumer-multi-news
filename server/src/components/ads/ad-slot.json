@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_ads_ad_slots",
+  "info": { "displayName": "Ad slot", "icon": "dashboard", "description": "AdSense settings for one ad position" },
+  "options": {},
+  "attributes": {
+    "slotKey": {
+      "type": "enumeration",
+      "enum": ["topLeaderboard", "heroRectangle", "videoInFeed", "midLeaderboard", "reelsLeaderboard", "facebookHalfPage", "instagramRectangle", "mobileAnchor"],
+      "required": true
+    },
+    "adsenseSlotId": { "type": "string", "regex": "^\\d*$" },
+    "enabled": { "type": "boolean", "default": true }
+  }
+}

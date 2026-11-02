@@ -14,12 +14,18 @@ export const FACEBOOK_PAGE_PLUGIN = {
   mobileBreakpoint: 760,
 } as const;
 
-/** URL for Facebook's embedded video/reel plugin. */
-export function facebookVideoPluginUrl(videoUrl: string): string {
+/** 16:9 size used for Facebook live streams. */
+export const FACEBOOK_LANDSCAPE_SIZE = { width: 1280, height: 720 } as const;
+
+/** URL for Facebook's embedded video/reel plugin (portrait reel size by default). */
+export function facebookVideoPluginUrl(
+  videoUrl: string,
+  size: { width: number; height: number } = FACEBOOK_REEL_SIZE,
+): string {
   const params = new URLSearchParams({
     href: videoUrl,
-    width: String(FACEBOOK_REEL_SIZE.width),
-    height: String(FACEBOOK_REEL_SIZE.height),
+    width: String(size.width),
+    height: String(size.height),
     show_text: "false",
     t: "0",
   });

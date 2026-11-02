@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_seo_organizations",
+  "info": { "displayName": "Organization", "icon": "house", "description": "NewsMediaOrganization structured data" },
+  "options": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "url": { "type": "string", "required": true, "regex": "^https?://" },
+    "logo": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "sameAs": { "type": "component", "repeatable": true, "component": "shared.link" }
+  }
+}

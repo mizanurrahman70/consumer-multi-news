@@ -1,0 +1,11 @@
+{
+  "kind": "singleType",
+  "collectionName": "ad_settings",
+  "info": { "singularName": "ad-setting", "pluralName": "ad-settings", "displayName": "Ad Settings", "description": "Google AdSense switch and slot ids" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "adsEnabled": { "type": "boolean", "default": true },
+    "adsenseClientId": { "type": "string", "regex": "^(ca-pub-\\d{16})?$" },
+    "slots": { "type": "component", "repeatable": true, "component": "ads.ad-slot" }
+  }
+}

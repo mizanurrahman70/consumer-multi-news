@@ -1,24 +1,23 @@
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonGroup } from "@/components/ui/Button";
 import { SECTION_IDS } from "@/config/navigation";
+import type { CtaCard } from "@/types/cms";
 
 interface TipSectionProps {
-  messengerUrl: string;
+  card: CtaCard;
 }
 
-/** Yellow call-to-action asking readers to send consumer complaints. */
-export function TipSection({ messengerUrl }: TipSectionProps) {
+/** Yellow call-to-action asking readers to send consumer complaints (Strapi → Home Page → tipBlock). */
+export function TipSection({ card }: TipSectionProps) {
   return (
     <section
       id={SECTION_IDS.tip}
       className="mt-12 flex scroll-mt-40 flex-wrap items-center justify-between gap-4 rounded-card bg-accent p-6"
     >
       <div>
-        <h2 className="mb-1 text-callout font-bold">Cheated on price, weight or quality?</h2>
-        <p className="text-body">Send us your consumer complaint or news tip. Our team may follow up and cover it.</p>
+        <h2 className="mb-1 text-callout font-bold">{card.title}</h2>
+        {card.text && <p className="text-body">{card.text}</p>}
       </div>
-      <ButtonLink variant="dark" size="lg" href={messengerUrl}>
-        Send a tip on Messenger
-      </ButtonLink>
+      <ButtonGroup buttons={card.buttons} size="lg" />
     </section>
   );
 }

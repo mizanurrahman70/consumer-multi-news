@@ -1,0 +1,12 @@
+{
+  "kind": "singleType",
+  "collectionName": "live_streams",
+  "info": { "singularName": "live-stream", "pluralName": "live-streams", "displayName": "Live Stream", "description": "Switch on while Multiply News is live on YouTube or Facebook" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "isLive": { "type": "boolean", "default": false, "required": true },
+    "url": { "type": "string", "regex": "^(https://(www\\.|m\\.|web\\.)?(youtube\\.com|youtu\\.be|facebook\\.com)/.+)?$" },
+    "platform": { "type": "enumeration", "enum": ["youtube", "facebook"] },
+    "title": { "type": "string", "maxLength": 150 }
+  }
+}

@@ -4,6 +4,9 @@
  */
 export const publicEnv = {
   siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/+$/, ""),
-  /** Google AdSense publisher id (ca-pub-…). Empty = show ad placeholders. */
+  /**
+   * Fallback AdSense publisher id (ca-pub-…), used only when Strapi's
+   * Ad Settings has none. Empty = ad placeholders.
+   */
   adsenseClient: process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "",
 } as const;

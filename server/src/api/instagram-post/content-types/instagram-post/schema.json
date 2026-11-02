@@ -1,0 +1,12 @@
+{
+  "kind": "collectionType",
+  "collectionName": "instagram_posts",
+  "info": { "singularName": "instagram-post", "pluralName": "instagram-posts", "displayName": "Instagram Post", "description": "Instagram reels and posts. Paste the link; shortcode and kind fill in on save." },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "url": { "type": "string", "required": true, "unique": true, "regex": "^https://(www\\.)?instagram\\.com/(reel|reels|p|tv)/[A-Za-z0-9_-]+.*" },
+    "shortcode": { "type": "string", "unique": true },
+    "kind": { "type": "enumeration", "enum": ["reel", "post"] },
+    "order": { "type": "integer", "required": true, "default": 0 }
+  }
+}

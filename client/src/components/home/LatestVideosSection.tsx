@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { VideoCard } from "@/components/video/VideoCard";
 import { SECTION_IDS } from "@/config/navigation";
 import { getLatestVideos } from "@/services/video.service";
-import type { SocialLinks } from "@/types/content";
+import type { SectionHeading } from "@/types/cms";
 
 /** The in-feed ad is inserted after this many cards. */
 const IN_FEED_AD_AFTER = 3;
@@ -15,23 +15,26 @@ const SKELETON_COUNT = 8;
 const gridClass = "grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 max-sm:grid-cols-1 max-sm:gap-1";
 
 interface LatestVideosSectionProps {
-  social: SocialLinks;
+  heading: SectionHeading;
+  limit: number;
 }
 
-function LatestVideosShell({ social, children }: LatestVideosSectionProps & { children: ReactNode }) {
+function LatestVideosShell({ heading, children }: { heading: SectionHeading; children: ReactNode }) {
   return (
     <section id={SECTION_IDS.latest} className="mt-10 scroll-mt-40">
-      <SectionHeader title="Latest Videos" link={{ label: "All videos on YouTube", href: social.youtubeVideos }} />
+      <SectionHeader heading={heading} />
       <div className={gridClass}>{children}</div>
     </section>
   );
 }
 
-export async function LatestVideosSection({ social }: LatestVideosSectionProps) {
-  const videos = await getLatestVideos();
+/** Grid of published Strapi "Video" entries: pinned first, then newest. */
+export async function LatestVideosSection({ heading, limit }: LatestVideosSectionProps) {
+  const videos = await getLatestVideos(limit);
+  if (videos.length === 0) return null;
 
   return (
-    <LatestVideosShell social={social}>
+    <LatestVideosShell heading={heading}>
       {videos.map((video, index) => (
         <Fragment key={video.id}>
           <VideoCard video={video} />
@@ -42,9 +45,9 @@ export async function LatestVideosSection({ social }: LatestVideosSectionProps) 
   );
 }
 
-export function LatestVideosSkeleton({ social }: LatestVideosSectionProps) {
+export function LatestVideosSkeleton({ heading }: Pick<LatestVideosSectionProps, "heading">) {
   return (
-    <LatestVideosShell social={social}>
+    <LatestVideosShell heading={heading}>
       {Array.from({ length: SKELETON_COUNT }, (_, index) => (
         <div key={index} className="flex flex-col gap-2" aria-hidden="true">
           <div className="skeleton aspect-video rounded-media" />

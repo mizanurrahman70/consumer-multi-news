@@ -1,4 +1,7 @@
+import { TickerVideoButton } from "@/components/home/TickerVideoButton";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { cn } from "@/lib/utils/cn";
+import { isExternalUrl } from "@/lib/utils/links";
 import { getTickerItems } from "@/services/video.service";
 import type { TickerItem } from "@/types/content";
 
@@ -7,12 +10,14 @@ const labelClass =
   "flex shrink-0 items-center bg-brand px-3.5 py-[9px] font-display text-body-sm font-bold tracking-[0.06em] text-canvas";
 
 function TickerHeadline({ item }: { item: TickerItem }) {
+  if (item.youtubeId) return <TickerVideoButton youtubeId={item.youtubeId} text={item.text} />;
+
   const text = `● ${item.text}`;
   if (!item.href) return <span>{text}</span>;
   return (
-    <a href={item.href} className="hover:text-brand">
+    <ExternalLink href={item.href} external={isExternalUrl(item.href)} className="hover:text-brand">
       {text}
-    </a>
+    </ExternalLink>
   );
 }
 

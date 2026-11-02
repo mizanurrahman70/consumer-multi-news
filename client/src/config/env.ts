@@ -12,9 +12,11 @@ function readNumber(value: string | undefined, fallback: number): number {
 }
 
 export const serverEnv = {
-  /** Base URL of the backend API, e.g. https://api.multiplynews.com/api/v1 */
-  apiBaseUrl: (process.env.API_BASE_URL ?? "").replace(/\/+$/, ""),
+  /** Strapi base URL without /api, e.g. http://localhost:1337 */
+  strapiUrl: (process.env.STRAPI_URL ?? "").replace(/\/+$/, ""),
+  /** Read-only Strapi API token (Settings → API Tokens). */
+  strapiToken: process.env.STRAPI_API_TOKEN ?? "",
   apiTimeoutMs: readNumber(process.env.API_TIMEOUT_MS, DEFAULT_TIMEOUT_MS),
-  /** Shared secret the backend sends when asking us to refresh cached content. */
+  /** Shared secret Strapi's webhook sends when asking us to refresh cached content. */
   revalidateSecret: process.env.REVALIDATE_SECRET ?? "",
 } as const;

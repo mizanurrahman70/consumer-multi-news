@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_shared_section_headings",
+  "info": { "displayName": "Section heading", "icon": "layer", "description": "Section title with an optional right-side link" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true, "maxLength": 80 },
+    "linkLabel": { "type": "string", "maxLength": 60 },
+    "linkUrl": { "type": "string", "maxLength": 500 }
+  }
+}

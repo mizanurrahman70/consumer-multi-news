@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_embed_youtube_videos",
+  "info": {
+    "displayName": "YouTube video",
+    "icon": "play",
+    "description": "Paste a YouTube link. The video ID and an empty title are filled in on save."
+  },
+  "options": {},
+  "attributes": {
+    "youtubeUrl": { "type": "string", "required": true, "regex": "^https://(www\\.|m\\.)?(youtube\\.com|youtu\\.be)/.+" },
+    "youtubeId": { "type": "string", "maxLength": 11 },
+    "title": { "type": "string", "maxLength": 200 },
+    "customThumbnail": { "type": "media", "multiple": false, "allowedTypes": ["images"] }
+  }
+}
