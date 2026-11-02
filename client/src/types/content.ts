@@ -1,18 +1,11 @@
 /**
- * Content contracts shared by the UI and the backend API.
- * The backend README documents the exact JSON for each of these types —
- * keep the two in sync whenever a field changes.
+ * Video and social content shown on the site. Strapi entries are mapped
+ * into these shapes in `src/lib/strapi/mappers`, so components never
+ * depend on the CMS response format.
  */
 
-/** Standard response envelope returned by every backend endpoint. */
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-}
-
 export interface Video {
-  /** Backend primary key. */
+  /** Stable key for lists. */
   id: string;
   /** 11-character YouTube video id, used for thumbnails and embeds. */
   youtubeId: string;
@@ -36,8 +29,10 @@ export interface FeaturedVideo {
 export interface TickerItem {
   id: string;
   text: string;
-  /** Optional link; when absent the headline is plain text. */
+  /** Optional external link. */
   href?: string | null;
+  /** Optional YouTube video that opens in the site's player. */
+  youtubeId?: string | null;
 }
 
 /** A Facebook reel or video shown through the official video plugin. */
@@ -57,6 +52,15 @@ export interface InstagramPost {
   kind: InstagramPostKind;
 }
 
+export type LivePlatform = "youtube" | "facebook";
+
+export interface LiveStream {
+  isLive: boolean;
+  url: string | null;
+  platform: LivePlatform | null;
+  title: string;
+}
+
 export interface SocialLinks {
   facebook: string;
   facebookReels: string;
@@ -67,20 +71,4 @@ export interface SocialLinks {
   youtubeShorts: string;
   youtubeLive: string;
   instagram: string;
-}
-
-export interface ContactInfo {
-  addressLines: string[];
-  phoneDisplay: string;
-  /** E.164 phone number used for the tel: link. */
-  phoneE164: string;
-}
-
-export interface SiteSettings {
-  name: string;
-  tagline: string;
-  description: string;
-  instagramHandle: string;
-  contact: ContactInfo;
-  social: SocialLinks;
 }

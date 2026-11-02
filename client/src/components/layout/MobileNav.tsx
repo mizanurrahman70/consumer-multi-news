@@ -4,13 +4,13 @@ import { useCallback, useState } from "react";
 
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { MenuIcon } from "@/components/ui/icons";
-import type { NavLink } from "@/config/navigation";
+import type { LinkItem } from "@/types/cms";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { cn } from "@/lib/utils/cn";
 
 interface MobileNavProps {
-  links: NavLink[];
+  links: LinkItem[];
 }
 
 const DRAWER_ID = "mobile-drawer";
@@ -44,7 +44,7 @@ export function MobileNav({ links }: MobileNavProps) {
         >
           {links.map((link) => (
             <ExternalLink
-              key={link.label}
+              key={`${link.label}-${link.href}`}
               href={link.href}
               external={link.external}
               onClick={link.external ? undefined : close}

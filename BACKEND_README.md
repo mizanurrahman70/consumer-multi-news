@@ -1,5 +1,8 @@
 # Multiply News — Backend Requirements
 
+> **Superseded:** the project now uses **Strapi** (`server/`) instead of a custom backend.
+> See [STRAPI_PLAN.md](STRAPI_PLAN.md) and [client/README.md](client/README.md). This file is kept for reference only.
+
 This document specifies everything the backend must provide so the Next.js
 frontend in [`client/`](client/) becomes fully dynamic. The frontend already
 consumes these exact endpoints. Until the backend exists, it renders bundled

@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": { "singularName": "home-page", "pluralName": "home-pages", "displayName": "Home Page", "description": "Hero, trending list and every section text on the home page" },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "seo": { "type": "component", "repeatable": false, "component": "shared.seo", "required": true },
+    "hero": { "type": "component", "repeatable": false, "component": "home.hero", "required": true },
+    "trendingTitle": { "type": "string", "required": true, "maxLength": 40, "default": "Trending Now" },
+    "trendingVideos": { "type": "component", "repeatable": true, "component": "embed.youtube-video", "max": 5 },
+    "latestSection": { "type": "component", "repeatable": false, "component": "shared.section-heading", "required": true },
+    "latestLimit": { "type": "integer", "required": true, "default": 12, "min": 3, "max": 30 },
+    "reelsSection": { "type": "component", "repeatable": false, "component": "shared.section-heading", "required": true },
+    "facebookSection": { "type": "component", "repeatable": false, "component": "shared.section-heading", "required": true },
+    "facebookBlock": { "type": "component", "repeatable": false, "component": "home.cta-card", "required": true },
+    "instagramSection": { "type": "component", "repeatable": false, "component": "shared.section-heading", "required": true },
+    "instagramBlock": { "type": "component", "repeatable": false, "component": "home.cta-card", "required": true },
+    "tipBlock": { "type": "component", "repeatable": false, "component": "home.cta-card", "required": true },
+    "footerBanner": { "type": "component", "repeatable": false, "component": "home.footer-banner", "required": true }
+  }
+}

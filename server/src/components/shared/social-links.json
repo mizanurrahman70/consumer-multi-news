@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_social_links",
+  "info": { "displayName": "Social links", "icon": "earth", "description": "All social profile URLs (https://)" },
+  "options": {},
+  "attributes": {
+    "facebook": { "type": "string", "required": true, "regex": "^https://" },
+    "facebookReels": { "type": "string", "required": true, "regex": "^https://" },
+    "messenger": { "type": "string", "required": true, "regex": "^https://" },
+    "youtube": { "type": "string", "required": true, "regex": "^https://" },
+    "youtubeSubscribe": { "type": "string", "required": true, "regex": "^https://" },
+    "youtubeVideos": { "type": "string", "required": true, "regex": "^https://" },
+    "youtubeShorts": { "type": "string", "required": true, "regex": "^https://" },
+    "youtubeLive": { "type": "string", "required": true, "regex": "^https://" },
+    "instagram": { "type": "string", "required": true, "regex": "^https://" }
+  }
+}

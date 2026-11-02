@@ -2,7 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { TodayDate } from "@/components/ui/ClientDate";
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from "@/components/ui/icons";
-import type { SiteSettings } from "@/types/content";
+import type { SiteSettings } from "@/types/cms";
 
 interface TopBarProps {
   settings: SiteSettings;

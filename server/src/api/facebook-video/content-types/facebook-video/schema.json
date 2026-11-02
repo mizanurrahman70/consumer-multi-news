@@ -1,0 +1,11 @@
+{
+  "kind": "collectionType",
+  "collectionName": "facebook_videos",
+  "info": { "singularName": "facebook-video", "pluralName": "facebook-videos", "displayName": "Facebook Video", "description": "Facebook reels and videos. Paste the public link." },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "url": { "type": "string", "required": true, "unique": true, "regex": "^https://(www\\.|m\\.|web\\.)?facebook\\.com/.+" },
+    "title": { "type": "string", "required": true, "maxLength": 150 },
+    "order": { "type": "integer", "required": true, "default": 0 }
+  }
+}

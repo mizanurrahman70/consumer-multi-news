@@ -1,0 +1,11 @@
+{
+  "kind": "singleType",
+  "collectionName": "navigations",
+  "info": { "singularName": "navigation", "pluralName": "navigations", "displayName": "Navigation", "description": "Header menu, mobile drawer menu and footer columns" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "headerMenu": { "type": "component", "repeatable": true, "component": "shared.link" },
+    "drawerMenu": { "type": "component", "repeatable": true, "component": "shared.link" },
+    "footerColumns": { "type": "component", "repeatable": true, "component": "nav.footer-column" }
+  }
+}

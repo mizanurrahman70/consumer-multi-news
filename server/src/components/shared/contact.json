@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_contacts",
+  "info": { "displayName": "Contact", "icon": "phone", "description": "Address and phone shown in the footer" },
+  "options": {},
+  "attributes": {
+    "addressLines": { "type": "text", "required": true, "description": "One address line per row" },
+    "phoneDisplay": { "type": "string", "required": true, "maxLength": 30 },
+    "phoneE164": { "type": "string", "required": true, "regex": "^\\+[1-9]\\d{6,14}$" },
+    "email": { "type": "email" }
+  }
+}

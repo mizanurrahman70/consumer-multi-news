@@ -44,4 +44,5 @@ export const FALLBACK_TICKER: TickerItem[] = FALLBACK_LATEST.slice(0, 8).map((it
   id: item.id,
   text: item.title,
   href: null,
+  youtubeId: item.youtubeId,
 }));

@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_seo_open_graphs",
+  "info": { "displayName": "Open Graph", "icon": "share", "description": "Overrides for Facebook/WhatsApp sharing" },
+  "options": {},
+  "attributes": {
+    "ogTitle": { "type": "string", "maxLength": 70 },
+    "ogDescription": { "type": "text", "maxLength": 200 },
+    "ogImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "ogType": { "type": "enumeration", "enum": ["website", "article", "video_other"], "default": "website" }
+  }
+}

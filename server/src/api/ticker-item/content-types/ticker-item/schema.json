@@ -1,0 +1,14 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ticker_items",
+  "info": { "singularName": "ticker-item", "pluralName": "ticker-items", "displayName": "Ticker Item", "description": "BREAKING headline strip. Optional link or YouTube link." },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "text": { "type": "string", "required": true, "maxLength": 200 },
+    "link": { "type": "string", "regex": "^(https://.+)?$" },
+    "youtubeUrl": { "type": "string", "regex": "^(https://(www\\.|m\\.)?(youtube\\.com|youtu\\.be)/.+)?$" },
+    "order": { "type": "integer", "required": true, "default": 0 },
+    "startsAt": { "type": "datetime" },
+    "endsAt": { "type": "datetime" }
+  }
+}

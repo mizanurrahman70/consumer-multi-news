@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_nav_footer_columns",
+  "info": { "displayName": "Footer column", "icon": "bulletList", "description": "A titled list of footer links" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true, "maxLength": 40 },
+    "links": { "type": "component", "repeatable": true, "component": "shared.link" }
+  }
+}

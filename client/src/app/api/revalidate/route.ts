@@ -4,14 +4,17 @@ import { revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
 
 import { serverEnv } from "@/config/env";
-import { ALL_CACHE_TAGS, isCacheTag, type CacheTag } from "@/lib/api/endpoints";
+import { ALL_CACHE_TAGS, MODEL_TAGS, isCacheTag, type CacheTag } from "@/lib/cache-tags";
 
 /**
- * On-demand cache refresh, called by the backend after content changes.
+ * On-demand cache refresh, called by Strapi's webhook after content changes.
  *
  *   POST /api/revalidate
  *   Header: x-revalidate-secret: <REVALIDATE_SECRET>
- *   Body:   { "tags": ["featured", "latest-videos"] }   // or { "all": true }
+ *
+ * Accepted bodies:
+ *   Strapi webhook  { "event": "entry.publish", "model": "video", … }
+ *   Manual          { "tags": ["home", "latest-videos"] }  or  { "all": true }
  */
 
 function isAuthorized(provided: string | null): boolean {
@@ -23,13 +26,16 @@ function isAuthorized(provided: string | null): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-function parseTags(body: unknown): CacheTag[] | null {
+function tagsFromBody(body: unknown): CacheTag[] | null {
   if (typeof body !== "object" || body === null) return null;
-  const { tags, all } = body as { tags?: unknown; all?: unknown };
+  const { event, model, tags, all } = body as Record<string, unknown>;
 
   if (all === true) return [...ALL_CACHE_TAGS];
-  if (!Array.isArray(tags) || tags.length === 0) return null;
-  return tags.every(isCacheTag) ? tags : null;
+  // Images can be used anywhere, so any media change refreshes everything.
+  if (typeof event === "string" && event.startsWith("media.")) return [...ALL_CACHE_TAGS];
+  if (typeof model === "string") return MODEL_TAGS[model] ? [...MODEL_TAGS[model]] : [];
+  if (Array.isArray(tags) && tags.length > 0 && tags.every(isCacheTag)) return tags;
+  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -37,11 +43,10 @@ export async function POST(request: NextRequest) {
     return Response.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
 
-  const body: unknown = await request.json().catch(() => null);
-  const tags = parseTags(body);
+  const tags = tagsFromBody(await request.json().catch(() => null));
   if (!tags) {
     return Response.json(
-      { success: false, message: `Send "tags" (any of: ${ALL_CACHE_TAGS.join(", ")}) or "all": true` },
+      { success: false, message: `Send a Strapi webhook payload, "tags" (${ALL_CACHE_TAGS.join(", ")}) or "all": true` },
       { status: 400 },
     );
   }

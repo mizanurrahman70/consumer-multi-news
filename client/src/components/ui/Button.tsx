@@ -2,8 +2,8 @@ import type { ComponentPropsWithoutRef } from "react";
 
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { cn } from "@/lib/utils/cn";
+import type { ButtonItem, ButtonVariant } from "@/types/cms";
 
-export type ButtonVariant = "yellow" | "dark" | "red" | "light";
 export type ButtonSize = "md" | "lg";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
@@ -36,4 +36,30 @@ type ButtonLinkProps = ComponentPropsWithoutRef<typeof ExternalLink> & {
 /** Pill-shaped link button. Most CTAs on this site point to social platforms. */
 export function ButtonLink({ variant, size, className, ...props }: ButtonLinkProps) {
   return <ExternalLink className={buttonClasses(variant, size, className)} {...props} />;
+}
+
+interface ButtonGroupProps {
+  buttons: ButtonItem[];
+  size?: ButtonSize;
+  className?: string;
+}
+
+/** Row of CMS-managed buttons (label, link, colour variant). */
+export function ButtonGroup({ buttons, size, className }: ButtonGroupProps) {
+  if (buttons.length === 0) return null;
+  return (
+    <div className={cn("flex flex-wrap gap-2.5", className)}>
+      {buttons.map((button) => (
+        <ButtonLink
+          key={`${button.label}-${button.href}`}
+          variant={button.variant}
+          size={size}
+          href={button.href}
+          external={button.external}
+        >
+          {button.label}
+        </ButtonLink>
+      ))}
+    </div>
+  );
 }

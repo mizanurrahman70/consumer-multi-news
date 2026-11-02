@@ -431,9 +431,9 @@ The webhook (§7.2) makes each change visible on the site within seconds.
 
 ---
 
-## 8. Frontend work needed to switch to Strapi (later)
+## 8. Frontend integration ✅ done
 
-The frontend currently expects the custom API in `BACKEND_README.md`. To use Strapi:
+Implemented in `client/` (see `client/README.md`):
 
 1. **API client:** read Strapi's `{ data, meta }` response (instead of `{ success, data }`) and send the read-only API token.
 2. **Mappers:** convert Strapi entries to the existing types in `client/src/types/content.ts`, so no UI component changes (e.g. `publishedDate → publishedAt`, `customThumbnail.url → thumbnailUrl`).

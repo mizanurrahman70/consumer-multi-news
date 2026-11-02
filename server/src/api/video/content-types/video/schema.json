@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "videos",
+  "info": { "singularName": "video", "pluralName": "videos", "displayName": "Video", "description": "YouTube videos for the Latest Videos grid. Paste the link; ID, slug and an empty title fill in on save." },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "youtubeUrl": { "type": "string", "required": true, "unique": true, "regex": "^https://(www\\.|m\\.)?(youtube\\.com|youtu\\.be)/.+" },
+    "youtubeId": { "type": "string", "unique": true, "maxLength": 11 },
+    "title": { "type": "string", "maxLength": 200 },
+    "slug": { "type": "uid" },
+    "description": { "type": "blocks" },
+    "publishedDate": { "type": "datetime", "required": true },
+    "customThumbnail": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "category": { "type": "relation", "relation": "manyToOne", "target": "api::category.category", "inversedBy": "videos" },
+    "tags": { "type": "relation", "relation": "manyToMany", "target": "api::tag.tag", "inversedBy": "videos" },
+    "isPinned": { "type": "boolean", "default": false },
+    "pinOrder": { "type": "integer", "min": 0 },
+    "seo": { "type": "component", "repeatable": false, "component": "shared.seo" }
+  }
+}

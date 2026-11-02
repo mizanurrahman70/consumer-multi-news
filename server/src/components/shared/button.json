@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_buttons",
+  "info": { "displayName": "Button", "icon": "cursor", "description": "Pill button with a colour variant" },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true, "maxLength": 60 },
+    "url": { "type": "string", "required": true, "maxLength": 500 },
+    "variant": { "type": "enumeration", "enum": ["yellow", "dark", "red", "light"], "default": "dark", "required": true },
+    "isExternal": { "type": "boolean", "default": true }
+  }
+}

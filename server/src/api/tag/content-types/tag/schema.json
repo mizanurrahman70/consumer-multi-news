@@ -1,0 +1,11 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tags",
+  "info": { "singularName": "tag", "pluralName": "tags", "displayName": "Tag", "description": "Optional keywords for videos" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "name": { "type": "string", "required": true, "unique": true, "maxLength": 60 },
+    "slug": { "type": "uid", "targetField": "name", "required": true },
+    "videos": { "type": "relation", "relation": "manyToMany", "target": "api::video.video", "mappedBy": "tags" }
+  }
+}
