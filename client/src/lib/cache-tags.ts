@@ -34,7 +34,10 @@ export const MODEL_TAGS: Readonly<Record<string, readonly CacheTag[]>> = {
   "ticker-item": [CACHE_TAGS.ticker],
   "facebook-video": [CACHE_TAGS.facebookVideos],
   "instagram-post": [CACHE_TAGS.instagramPosts],
-  page: [CACHE_TAGS.pages],
+  "about-page": [CACHE_TAGS.pages],
+  "advertise-page": [CACHE_TAGS.pages],
+  "privacy-policy-page": [CACHE_TAGS.pages],
+  "contact-page": [CACHE_TAGS.pages],
 };
 
 export function isCacheTag(value: unknown): value is CacheTag {

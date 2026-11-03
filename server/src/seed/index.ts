@@ -1,7 +1,8 @@
 import type { Core, UID } from '@strapi/strapi';
 
-import { CATEGORIES, FACEBOOK_VIDEOS, INSTAGRAM_POSTS, PAGES, VIDEOS } from './data/content';
+import { CATEGORIES, FACEBOOK_VIDEOS, INSTAGRAM_POSTS, VIDEOS } from './data/content';
 import { HOME_PAGE } from './data/home';
+import { ABOUT_PAGE, ADVERTISE_PAGE, CONTACT_PAGE, PRIVACY_POLICY_PAGE } from './data/pages';
 import { AD_SETTINGS, LIVE_STREAM, NAVIGATION, SITE_SETTINGS } from './data/site';
 
 /*
@@ -13,7 +14,8 @@ import { AD_SETTINGS, LIVE_STREAM, NAVIGATION, SITE_SETTINGS } from './data/site
  * Set SEED_DEFAULT_CONTENT=false to skip it.
  */
 
-const SEED_VERSION = 1;
+// Bump when new default content is added; only empty content types are filled.
+const SEED_VERSION = 2;
 const SEED_STORE = { type: 'core', name: 'multiply-news', key: 'default-content-seed-version' };
 
 type SeedData = Record<string, unknown>;
@@ -79,7 +81,10 @@ export async function seedDefaultContent(strapi: Core.Strapi): Promise<void> {
     await seedVideos(strapi);
     await seedMany(strapi, 'api::facebook-video.facebook-video', FACEBOOK_VIDEOS);
     await seedMany(strapi, 'api::instagram-post.instagram-post', INSTAGRAM_POSTS);
-    await seedMany(strapi, 'api::page.page', PAGES, false);
+    await seedSingle(strapi, 'api::about-page.about-page', ABOUT_PAGE);
+    await seedSingle(strapi, 'api::advertise-page.advertise-page', ADVERTISE_PAGE);
+    await seedSingle(strapi, 'api::privacy-policy-page.privacy-policy-page', PRIVACY_POLICY_PAGE);
+    await seedSingle(strapi, 'api::contact-page.contact-page', CONTACT_PAGE);
 
     await store.set({ value: SEED_VERSION });
     strapi.log.info('[seed] Default content ready.');

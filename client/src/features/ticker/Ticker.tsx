@@ -4,9 +4,9 @@ import { ExternalLink } from "@/components/ui/ExternalLink";
 import { cn } from "@/lib/utils/cn";
 import { isExternalUrl } from "@/lib/utils/links";
 import type { TickerItem } from "@/types/content";
+import { useSection } from "@/hooks/useSection";
 
 import { TickerVideoButton } from "./TickerVideoButton";
-import { useTicker } from "./useTicker";
 
 const tickerClass = "mt-4 flex overflow-hidden border border-line";
 const labelClass =
@@ -24,21 +24,9 @@ function TickerHeadline({ item }: { item: TickerItem }) {
   );
 }
 
-function TickerSkeleton() {
-  return (
-    <div className={tickerClass} aria-hidden="true">
-      <b className={labelClass}>BREAKING</b>
-      <div className="flex flex-1 items-center px-3.5">
-        <span className="text-body-sm text-muted">Loading latest headlines…</span>
-      </div>
-    </div>
-  );
-}
-
 /** Scrolling "BREAKING" headline strip. Pauses on hover; static for reduced motion. */
 export function Ticker() {
-  const { data: items, isLoading } = useTicker();
-  if (isLoading) return <TickerSkeleton />;
+  const items = useSection("ticker");
   if (!items || items.length === 0) return null;
 
   return (

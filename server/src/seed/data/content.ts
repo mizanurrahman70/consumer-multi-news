@@ -42,21 +42,3 @@ export const FACEBOOK_VIDEOS = [
 export const INSTAGRAM_POSTS = ['DemZvOtkuOr', 'Dc1ID2CD3dQ', 'DcvuQHvgda2', 'DctUA9ogfDA', 'Dcqvm_aiS82', 'DcoMhQeEoAb'].map(
   (code, index) => ({ url: `https://www.instagram.com/reel/${code}/`, order: index + 1 }),
 );
-
-const paragraph = (text: string) => ({ type: 'paragraph', children: [{ type: 'text', text }] });
-
-/** Company pages are created as drafts with placeholder text for editors to complete. */
-export const PAGES = [
-  { title: 'About us', slug: 'about-us' },
-  { title: 'Advertise with us', slug: 'advertise' },
-  { title: 'Privacy policy', slug: 'privacy-policy' },
-  { title: 'Contact', slug: 'contact' },
-].map((page) => ({
-  ...page,
-  content: [paragraph('Content coming soon. Replace this text, then publish the page.')],
-  seo: {
-    metaTitle: `${page.title} — Multiply News`,
-    metaDescription: `${page.title} — Multiply News, the consumer-focused news portal from Bangladesh.`,
-    metaRobots: 'index_follow',
-  },
-}));

@@ -2,12 +2,11 @@
 
 import { ButtonGroup } from "@/components/ui/Button";
 import { SECTION_IDS } from "@/config/navigation";
-
-import { useTip } from "./useTip";
+import { useSection } from "@/hooks/useSection";
 
 /** Yellow call-to-action asking readers to send consumer complaints (Strapi → Home Page → tipBlock). */
 export function TipSection() {
-  const { data: card } = useTip();
+  const card = useSection("tip");
   if (!card) return null;
 
   return (

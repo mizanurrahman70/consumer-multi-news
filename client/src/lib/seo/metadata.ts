@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { publicEnv } from "@/config/public-env";
-import type { SeoMeta, SiteSettings } from "@/types/cms";
+import type { CompanyPageBase, SeoMeta, SiteSettings } from "@/types/cms";
 
 interface MetadataOptions {
   /** Path of the page, e.g. "/" or "/about-us" (used for canonical and og:url). */
@@ -39,6 +39,16 @@ export function toMetadata(seo: SeoMeta, { path, siteName }: MetadataOptions): M
       images: images?.map((image) => image.url),
     },
   };
+}
+
+/** Metadata for a footer "Company" page: its own SEO, else the site default with the page title. */
+export function companyPageMetadata(page: CompanyPageBase, path: string, settings: SiteSettings): Metadata {
+  const seo = page.seo ?? {
+    ...settings.defaultSeo,
+    title: `${page.title} — ${settings.name}`,
+    description: page.subtitle ?? settings.defaultSeo.description,
+  };
+  return toMetadata(seo, { path, siteName: settings.name });
 }
 
 /** NewsMediaOrganization + WebSite structured data for every page. */

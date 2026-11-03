@@ -26,25 +26,28 @@ content from `src/data/fallback/`, so it never shows a blank page.
 ```
 Strapi entry saved ──► Strapi webhook ──► POST /api/revalidate ──► cache tag expired
                                                                        │
-Home-page section (browser)                         server
-features/<name>/Section.tsx ── use<Name>() hook ──► GET /api/sections/<name> ──► features/<name>/server.ts
-        (SWR: loading / error / data)   api.ts                                    └► service ("use cache" + tag)
-                                                                                     └► lib/strapi (client + mapper)
+Home page (server)  loadHome() ──► HTML already contains every section (SEO, no loading flash)
+                          │
+                          ▼  first data for SWR (HomeDataProvider)
+features/<name>/Section.tsx ── useSection("<name>") ── useHome() ──► GET /api/home (1 request, every minute)
+                                                                       └► api/server/home.ts → api/server/sections/*.ts
+                                                                          └► service ("use cache" + tag) → lib/strapi
 ```
 
-- **Features** (`src/features/<section>/`): every home-page section has its own folder:
+- **`src/api/`** holds every data call:
+  - `api/client/types.ts`: the data type of each section; `api/client/home.ts`: `fetchHome()` for the browser.
+  - `api/server/sections/<name>.ts`: one loader per section (server-only, reads Strapi via services).
+  - `api/server/home.ts`: `loadHome()` runs all loaders in parallel; used by the page and by `/api/home`.
+- **`src/hooks/useHome.ts` / `useSection.ts`**: one SWR request shared by all sections;
+  `useSection("tip")` returns just that part. Refreshes every minute (also catches going live).
+- **`src/features/<name>/`**: UI only (components + `index.ts`).
+- Heavy embeds (Facebook Page Plugin, Instagram) mount only when the reader scrolls near them (`LazyMount`).
+- Ads stay server-rendered and are passed into sections as props (`inFeedAd`, `ad`).
+- Header, footer, metadata and the company pages are rendered on the server.
 
-  | File | Role |
-  |---|---|
-  | `api.ts` | Endpoint URL, data type, browser `fetchX()` |
-  | `useX.ts` | SWR hook returning `{ data, error, isLoading }` |
-  | `XSection.tsx` | `"use client"` UI with its own loading skeleton |
-  | `server.ts` | Server loader for `/api/sections/<name>` (server-only) |
-  | `index.ts` | Public exports (component, hook, type) |
+To add a section: add its type to `api/client/types.ts`, a loader in `api/server/sections/`,
+include it in `api/server/home.ts`, then build the UI in `features/<name>/` with `useSection`.
 
-  Register a new section's loader in `src/features/section-loaders.ts`. Ads and SEO stay
-  server-rendered and are passed into sections as props (`inFeedAd`, `ad`).
-- Header, footer, metadata and CMS pages (`/[slug]`) are still rendered on the server.
 - **Services** (`src/services/`) are the only place components get data. Each is cached with
   `"use cache"`, `cacheLife` and a tag from `src/lib/cache-tags.ts`.
 - **Mappers** (`src/lib/strapi/mappers/`) convert Strapi responses into the site's own types
@@ -62,17 +65,19 @@ features/<name>/Section.tsx ── use<Name>() hook ──► GET /api/sections/
 | Live Stream | Red LIVE block above the hero while `isLive` is on |
 | Facebook Video / Instagram Post | Reels row / Instagram grid |
 | Ad Settings | Every ad slot (on/off, AdSense ids) and the AdSense script |
-| Page | `/about-us`, `/privacy-policy`, … (`src/app/[slug]`) and the sitemap |
+| About / Advertise / Privacy Policy / Contact Page | `/about-us`, `/advertise`, `/privacy-policy`, `/contact` (one single type each) |
 
 ## Project structure
 
 ```
 src/
-  app/                 layout, home, [slug] pages, sitemap, robots, error/404,
-                       /api/revalidate, /api/sections/[section]
-  features/            one folder per home-page section: ticker, live, featured-video,
-                       trending-videos, latest-videos, facebook-reels, facebook-page,
-                       instagram, tip (api.ts, hook, component, server.ts, index.ts)
+  app/                 layout, home, about-us, advertise, privacy-policy, contact, sitemap, robots, error/404,
+                       /api/revalidate, /api/home
+  api/client/          section types + fetchHome() (browser)
+  api/server/          loadHome() + one loader per section (server-only)
+  hooks/               useHome, useSection, useInView, useIsClient…
+  features/            UI only, one folder per home-page section: ticker, live, featured-video,
+                       trending-videos, latest-videos, facebook-reels, facebook-page, instagram, tip
   components/
     ui/                primitives: Button(Group), Container, SectionHeader, CmsImage, CtaCardContent, icons…
     layout/            TopBar, Header, MobileNav, Footer, FooterBanner, Logo

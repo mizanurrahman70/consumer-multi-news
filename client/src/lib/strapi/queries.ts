@@ -73,8 +73,8 @@ export function orderedListQuery(fields: string[], limit: number): StrapiQuery {
   return { fields, sort: ["order:asc", "createdAt:desc"], pagination: { limit } };
 }
 
-export function pageBySlugQuery(slug: string): StrapiQuery {
-  return { filters: { slug: { $eq: slug } }, populate: { seo: SEO_POPULATE }, pagination: { limit: 1 } };
-}
-
-export const PAGE_SLUGS_QUERY: StrapiQuery = { fields: ["slug", "updatedAt"], pagination: { limit: 100 } };
+/** The footer "Company" pages: SEO, images and buttons need explicit populate. */
+export const ABOUT_PAGE_QUERY: StrapiQuery = { populate: { seo: SEO_POPULATE, coverImage: true } };
+export const ADVERTISE_PAGE_QUERY: StrapiQuery = { populate: { seo: SEO_POPULATE, buttons: true } };
+export const PRIVACY_POLICY_PAGE_QUERY: StrapiQuery = { populate: { seo: SEO_POPULATE } };
+export const CONTACT_PAGE_QUERY: StrapiQuery = { populate: { seo: SEO_POPULATE, buttons: true } };
