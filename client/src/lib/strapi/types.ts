@@ -139,10 +139,31 @@ export interface StrapiInstagramPost {
   kind?: Maybe<string>;
 }
 
-export interface StrapiPage {
+type StrapiBlocks = Maybe<Array<Record<string, unknown>>>;
+
+interface StrapiCompanyPageBase {
   title?: Maybe<string>;
-  slug?: Maybe<string>;
-  content?: Maybe<Array<Record<string, unknown>>>;
+  subtitle?: Maybe<string>;
+  content?: StrapiBlocks;
   seo?: Maybe<StrapiSeo>;
-  updatedAt?: Maybe<string>;
+}
+
+export interface StrapiAboutPage extends StrapiCompanyPageBase {
+  coverImage?: Maybe<StrapiMedia>;
+}
+
+export interface StrapiAdvertisePage extends StrapiCompanyPageBase {
+  contactEmail?: Maybe<string>;
+  contactPhone?: Maybe<string>;
+  buttons?: Maybe<StrapiButton[]>;
+}
+
+export interface StrapiPrivacyPolicyPage extends StrapiCompanyPageBase {
+  lastUpdated?: Maybe<string>;
+}
+
+export interface StrapiContactPage extends StrapiCompanyPageBase {
+  showContactDetails?: Maybe<boolean>;
+  mapLink?: Maybe<string>;
+  buttons?: Maybe<StrapiButton[]>;
 }

@@ -129,10 +129,31 @@ export interface HomePageContent {
 /** Rich text from Strapi's "Blocks" field, rendered by @strapi/blocks-react-renderer. */
 export type BlocksContent = Array<Record<string, unknown>>;
 
-export interface CmsPage {
+/** Fields shared by the footer "Company" pages (About, Advertise, Privacy, Contact). */
+export interface CompanyPageBase {
   title: string;
-  slug: string;
+  subtitle: string | null;
   content: BlocksContent;
   seo: SeoMeta | null;
-  updatedAt: string | null;
+}
+
+export interface AboutPage extends CompanyPageBase {
+  coverImage: MediaImage | null;
+}
+
+export interface AdvertisePage extends CompanyPageBase {
+  contactEmail: string | null;
+  contactPhone: string | null;
+  buttons: ButtonItem[];
+}
+
+export interface PrivacyPolicyPage extends CompanyPageBase {
+  /** ISO date (YYYY-MM-DD). */
+  lastUpdated: string | null;
+}
+
+export interface ContactPage extends CompanyPageBase {
+  showContactDetails: boolean;
+  mapLink: string | null;
+  buttons: ButtonItem[];
 }

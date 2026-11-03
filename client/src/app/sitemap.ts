@@ -1,16 +1,16 @@
 import type { MetadataRoute } from "next";
 
 import { publicEnv } from "@/config/public-env";
-import { getPublishedPages } from "@/services/page.service";
 
-/** /sitemap.xml — the home page plus every published Strapi page. */
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages = await getPublishedPages();
+/** Footer "Company" pages, each backed by its own Strapi single type. */
+const COMPANY_PATHS = ["/about-us", "/advertise", "/privacy-policy", "/contact"];
+
+/** /sitemap.xml — the home page plus the company pages. */
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${publicEnv.siteUrl}/`, changeFrequency: "hourly", priority: 1 },
-    ...pages.map((page) => ({
-      url: `${publicEnv.siteUrl}/${page.slug}`,
-      lastModified: page.updatedAt ?? undefined,
+    ...COMPANY_PATHS.map((path) => ({
+      url: `${publicEnv.siteUrl}${path}`,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),

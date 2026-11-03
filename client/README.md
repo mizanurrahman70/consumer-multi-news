@@ -43,7 +43,7 @@ features/<name>/Section.tsx ── useSection("<name>") ── useHome() ──�
 - **`src/features/<name>/`**: UI only (components + `index.ts`).
 - Heavy embeds (Facebook Page Plugin, Instagram) mount only when the reader scrolls near them (`LazyMount`).
 - Ads stay server-rendered and are passed into sections as props (`inFeedAd`, `ad`).
-- Header, footer, metadata and CMS pages (`/[slug]`) are rendered on the server.
+- Header, footer, metadata and the company pages are rendered on the server.
 
 To add a section: add its type to `api/client/types.ts`, a loader in `api/server/sections/`,
 include it in `api/server/home.ts`, then build the UI in `features/<name>/` with `useSection`.
@@ -65,13 +65,13 @@ include it in `api/server/home.ts`, then build the UI in `features/<name>/` with
 | Live Stream | Red LIVE block above the hero while `isLive` is on |
 | Facebook Video / Instagram Post | Reels row / Instagram grid |
 | Ad Settings | Every ad slot (on/off, AdSense ids) and the AdSense script |
-| Page | `/about-us`, `/privacy-policy`, … (`src/app/[slug]`) and the sitemap |
+| About / Advertise / Privacy Policy / Contact Page | `/about-us`, `/advertise`, `/privacy-policy`, `/contact` (one single type each) |
 
 ## Project structure
 
 ```
 src/
-  app/                 layout, home, [slug] pages, sitemap, robots, error/404,
+  app/                 layout, home, about-us, advertise, privacy-policy, contact, sitemap, robots, error/404,
                        /api/revalidate, /api/home
   api/client/          section types + fetchHome() (browser)
   api/server/          loadHome() + one loader per section (server-only)
